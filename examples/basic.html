@@ -1,0 +1,25 @@
+<html>
+
+<body>
+    <h1>Basic Example</h1>
+    <input type="text" id="inp" />
+    <br/>
+    You typed: <pre id="output"></pre>
+</body>
+
+<script type="module">
+    import { observable, bindInput } from "/src/index.js"
+
+    const input = document.getElementById("inp")
+    const output = document.getElementById("output")
+
+    const msg = observable("")
+
+    msg.subscribe(v => {
+        output.innerText = v
+    })
+
+    bindInput(msg, input)
+</script>
+
+</html>

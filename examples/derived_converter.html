@@ -1,0 +1,24 @@
+<html>
+
+<body>
+    <h1>Derived Example</h1>
+    <h2>Temperature Converter</h2>
+    <label>Celcius = <input type="text" id="inp" />°</label>
+    <p>Farenheit = 	<span id="output">NaN</span>°</p>
+</body>
+
+<script type="module">
+    import { observable, derived, bindInput } from "/src/index.js"
+
+    const input = document.getElementById("inp")
+    const output = document.getElementById("output")
+
+    const celcius = observable(null)
+    const farenheit = derived([celcius], () => ((celcius()*9/5)+32))
+
+    farenheit.subscribe(v => output.innerText = v)
+
+    bindInput(celcius, input)
+</script>
+
+</html>

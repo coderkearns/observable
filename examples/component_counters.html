@@ -1,0 +1,51 @@
+<html>
+
+<body>
+    <h1>Component() Example</h1>
+    <h2>Counters</h2>
+    <section id="counters">
+
+    </section>
+</body>
+
+<script type="module">
+    import { observable, Component } from "../src/index.js"
+
+    const counters = document.getElementById("counters")
+
+    const Counter = Component(function({ id = "?" }) {
+        this.counter = observable(0)
+
+        const el = document.createElement("div")
+
+        const title = document.createElement("h2")
+        const label = document.createElement("p")
+        const upBtn = document.createElement("button")
+        const downBtn = document.createElement("button")
+
+        el.appendChild(title)
+        el.appendChild(label)
+        el.appendChild(upBtn)
+        el.appendChild(downBtn)
+
+        title.innerText = `Counter ${id}`
+        upBtn.innerText = "count++"
+        downBtn.innerText = "count--"
+
+        const render = () => label.innerText = `The count is ${this.counter()}`
+        upBtn.onclick = () => this.counter.set(c => c + 1)
+        downBtn.onclick = () => this.counter.set(c => c - 1)
+
+        this.counter.subscribe(render)
+        render()
+
+        return el
+    })
+
+    for (let i = 1; i < 11; i++) {
+        const counter = Counter({ id: i })
+        counters.appendChild(counter())
+    }
+</script>
+
+</html>

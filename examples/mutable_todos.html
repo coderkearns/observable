@@ -1,0 +1,64 @@
+<html>
+
+<body>
+    <h1>mutable() Example</h1>
+    <h2>Todos</h2>
+    <ul id="list"></ul>
+    <input id="inp">
+</body>
+
+<script type="module">
+    import { mutable } from "../src/index.js"
+
+    const list = document.getElementById("list")
+    const input = document.getElementById("inp")
+
+    function createTodo(name) {
+        const li = document.createElement("li")
+        const box = document.createElement("input")
+        box.setAttribute("type", "checkbox")
+        const label = document.createElement("input")
+        label.value = name
+
+        li.appendChild(box)
+        li.appendChild(label)
+
+
+        const todo = mutable({ name, done: false })
+
+        // Render
+        todo.subscribe(() => {
+            box.checked = todo().done
+            label.innerText = todo().name
+        })
+
+        // Logging based on original name
+        todo.subscribe(() => {
+            console.log(`[${name}]`, todo())
+        })
+
+        box.addEventListener("change", e => {
+            todo.mutate(t => {
+                t.done = e.target.checked
+            })
+        })
+
+        label.addEventListener("input", e => {
+            todo.mutate(t => {
+                t.name = e.target.value
+            })
+        })
+
+        return li
+    }
+
+
+    input.addEventListener("keyup", e => {
+        if (event.key === "Enter") {
+            list.appendChild(createTodo(input.value))
+            input.value = ""
+        }
+    })
+</script>
+
+</html>

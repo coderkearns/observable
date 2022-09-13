@@ -1,0 +1,48 @@
+<html>
+
+<body>
+    <h1>bindList() Example</h1>
+    <h2>Todos</h2>
+    <ul id="list"></ul>
+    <input id="inp">
+</body>
+
+<script type="module">
+    import { observable, bindList } from "../src/index.js"
+
+    const list = document.getElementById("list")
+    const input = document.getElementById("inp")
+
+    const todos = observable([])
+
+    const todo = (name, done = false) => ({ name, done, id: todos().length })
+    const createLi = t => {
+        const box = document.createElement("input")
+        box.setAttribute("type", "checkbox")
+        box.checked = t.done
+        box.addEventListener("click", e => {
+            todos.set(todos().map(currentTodo => currentTodo.id === t.id ? { ...currentTodo, done: box.checked } : currentTodo))
+        })
+
+        const span = document.createElement("span")
+        span.innerHTML = t.done ? `<del>${t.name}</del>` : t.name
+
+        const li = document.createElement("li")
+        li.appendChild(box)
+        li.appendChild(span)
+
+        return li
+    }
+
+
+    bindList(todos, list, createLi)
+
+    input.addEventListener("keyup", e => {
+        if (event.key === "Enter") {
+            todos.set(todos().concat([todo(input.value)]))
+            input.value = ""
+        }
+    })
+</script>
+
+</html>
