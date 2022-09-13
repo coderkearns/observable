@@ -1,8 +1,7 @@
 <div align="center">
     <h1>observable</h1>
+    <p>Simple utils for javascript reactivity, with just enough to be called a "framework"</p>
 </div>
-
-Simple utils for javascript reactivity, with just enough to be called a "framework"
 
 ## Description
 
