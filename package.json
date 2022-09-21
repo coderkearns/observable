@@ -1,8 +1,9 @@
 {
   "name": "observable",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+"description": "Simple utils for javascript reactivity, with just enough to be called a \"framework\"",
+"main": "src/index.js",
+"type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

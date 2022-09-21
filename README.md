@@ -28,7 +28,7 @@ $ yarn add https://github.com/coderkearns/observable
 Check out each utility separately to see what it can do. Here's an example for `observable()`:
 
 ```js
-import { observable } from 'observable/observable'
+import { observable } from 'observable/src/observable'
 
 const count = observable(0)
 
