@@ -1,17 +1,23 @@
 export function bind(o, node, onObserveChange, eventName, onEvent) {
     if (!o.$OBSERVABLE) throw new Error("bind() requires an observable as it's second value")
 
-    // We are using an object with .call() as our listener instead of a function so we can modify its behavior without resubscribing
-    const observableChangeListener = {
-        call: (...args) => onObserveChange.call(...args),
+    // TODO decide whether to handle `shouldRender` ourselves or have the users handle it.
+    // The users handling it allows them to call `.set()` of other observables if they choose, but puts more work on their end.
+    // It would remove some of the "magic" though, which would be nice.
+    let shouldRender = true
+
+    const observableChangeListener = (...args) => {
+        if (shouldRender) {
+            onObserveChange.call(...args)
+        }
     }
 
-    const removeListener = o.subscribe(onObserveChange)
+    const removeListener = o.subscribe(observableChangeListener)
 
     const handleEvent = (e) => {
-        observableChangeListener.call = () => { } // Remove the subscribe listener so any calls to set() don't rerender the node with the same value
+        shouldRender = false // Remove the subscribe listener so any calls to set() don't rerender the node with the same value
         onEvent(e)
-        observableChangeListener.call = (...args) => onObserveChange.call(...args) // Resubscribe
+        shouldRender = true // Resubscribe
     }
     node.addEventListener(eventName, handleEvent)
 
